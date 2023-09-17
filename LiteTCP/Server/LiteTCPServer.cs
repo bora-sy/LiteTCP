@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using LiteTCP.Events;
+using System;
 using System.IO;
-using System.Linq;
 using System.Net;
 using System.Net.Sockets;
-using System.Runtime.InteropServices;
 using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace LiteTCP.Server
@@ -14,45 +11,84 @@ namespace LiteTCP.Server
     public class LiteTCPServer
     {
         private TcpListener listener;
-
+        public bool Listening { get; private set; } = false;
 
         public LiteTCPServer(IPAddress IP, int Port) => listener = new TcpListener(IP, Port);
         public LiteTCPServer(IPEndPoint endPoint) => listener = new TcpListener(endPoint);
 
-        private bool listening = false;
 
+        #region Start / Stop
         public void StopListening()
         {
-            if (!listening) throw new Exception("Server was not listening");
+            if (!Listening) throw new Exception("Server was not Listening");
 
             listener.Stop();
-            listening = false;
+            Listening = false;
         }
-
         public void StartListening()
         {
-            if (listening) throw new Exception("Server is already listening");
+            if (Listening) throw new Exception("Server is already Listening");
 
             listener.Start();
-            listening = true;
+            Listening = true;
 
-            Task.Run(async() =>
+            var A = Task.Run(() =>
             {
-                while(true)
+                while (true)
                 {
-                    TcpClient client = listener.AcceptTcpClient();
-                    _ = HandleIncomingAsync(client);
-
+                    try
+                    {
+                        TcpClient client = listener.AcceptTcpClient();
+                        _ = HandleIncomingAsync(client);
+                    }
+                    catch (Exception ex)
+                    {
+                        if (ServerErrored != null) ServerErrored(this, ex);
+                    }
+                    finally
+                    {
+                        StopListening();
+                    }
                 }
             });
+
         }
+        #endregion
 
+        #region Send Data
+        public async Task<bool> SendAsync(TcpClient client, byte[] data)
+        {
+            if (!Listening) throw new Exception("Server is not listening");
+            if (!client.Connected) throw new Exception("Client is not Connected");
 
+            if (data == null) throw new ArgumentNullException(nameof(data));
+
+            try
+            {
+                NetworkStream stream = client.GetStream();
+                bool res = await NetworkStreamUtils.writeDataToNetworkStreamAsync(stream, data);
+                return res;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+        public async Task<bool> SendAsync(TcpClient client, string data, Encoding encoding)
+        {
+            if (data == null) throw new ArgumentNullException(nameof(data));
+            if (encoding == null) throw new ArgumentNullException(nameof(encoding));
+
+            return await SendAsync(client, encoding.GetBytes(data));
+        }
+        #endregion
+
+        #region Events
         public event EventHandler<TcpClient> ClientConnected;
         public event EventHandler<TcpClient> ClientDisconnected;
-
-        public event EventHandler<TCPData> DataReceived;
-
+        public event EventHandler<TCPDataReceivedEventArgs> DataReceived;
+        public event EventHandler<Exception> ServerErrored;
+        #endregion
 
 
         private async Task HandleIncomingAsync(TcpClient client)
@@ -65,9 +101,10 @@ namespace LiteTCP.Server
 
                 while (client.Connected)
                 {
-                    byte[] data = Utils.readDataFromNetworkStream(stream);
+                    byte[] incomingData = await NetworkStreamUtils.readDataFromNetworkStreamAsync(stream);
+                    if (incomingData == null) throw new IOException();
 
-                    if (DataReceived != null) DataReceived.Invoke(this, new TCPData(client, data));
+                    if (DataReceived != null) DataReceived.Invoke(this, new TCPDataReceivedEventArgs(client, incomingData));
                 }
 
             }
@@ -81,9 +118,9 @@ namespace LiteTCP.Server
             }
             finally
             {
-                client.Close();
                 if (ClientDisconnected != null) ClientDisconnected.Invoke(this, client);
-                
+
+                client.Close();
                 client.Dispose();
             }
 
@@ -91,21 +128,6 @@ namespace LiteTCP.Server
 
 
         }
-
-
-
-
-        public class TCPData
-        {
-            public TCPData(TcpClient Client, byte[] Data)
-            {
-                this.Client = Client;
-                this.Data = Data;
-            }
-            public TcpClient Client { get; internal set; }
-            public byte[] Data { get; internal set; }
-        }
-
     }
 
 }

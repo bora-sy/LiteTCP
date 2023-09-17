@@ -22,17 +22,13 @@ namespace LiteTCP_TestServer
             server.StartListening();
             Console.WriteLine("Started Listening");
 
-            while(true)
-            {
-                string a = Console.ReadLine();
-            }
+            await Task.Delay(-1);
         }
 
-        private static void Server_DataReceived(object sender, LiteTCPServer.TCPData e)
+        private static void Server_DataReceived(object sender, LiteTCP.Events.TCPDataReceivedEventArgs e)
         {
             string data = Encoding.UTF8.GetString(e.Data);
             Console.WriteLine("Received Data: " + data);
-
         }
 
         private static void Server_ClientDisconnected(object sender, System.Net.Sockets.TcpClient e)

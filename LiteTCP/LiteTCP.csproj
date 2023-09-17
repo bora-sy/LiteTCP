@@ -42,9 +42,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Client\LiteTCPClient.cs" />
+    <Compile Include="Events\TCPDataReceivedEventArgs.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Server\LiteTCPServer.cs" />
-    <Compile Include="Utils.cs" />
+    <Compile Include="NetworkStreamUtils.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
