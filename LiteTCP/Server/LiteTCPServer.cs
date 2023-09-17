@@ -32,6 +32,7 @@ namespace LiteTCP.Server
         public LiteTCPServer(IPEndPoint endPoint) => listener = new TcpListener(endPoint);
 
         #region Start / Stop
+
         /// <summary>
         /// Stops the server
         /// </summary>
@@ -78,6 +79,7 @@ namespace LiteTCP.Server
             });
 
         }
+
         #endregion
 
         #region Send Data
@@ -126,15 +128,17 @@ namespace LiteTCP.Server
 
             return await SendAsync(client, encoding.GetBytes(data));
         }
+
         #endregion
 
         #region Broadcast
+
         /// <summary>
         /// Broadcasts the given data to the all connected clients
         /// </summary>
         /// <param name="data">Text to broadcast</param>
         /// <param name="encoding">The encoding that's used for the text</param>
-        /// <returns>A dictionary where the keys are the clients and the values are whether the data sending was successful</returns>
+        /// <returns>A dictionary where the keys are the clients and the values indicate whether the data sending was successful</returns>
         /// <exception cref="Exception"></exception>
         /// <exception cref="ArgumentNullException"></exception>
         public async Task<Dictionary<TcpClient, bool>> BroadcastAsync(string data, Encoding encoding)
@@ -147,13 +151,20 @@ namespace LiteTCP.Server
             return await BroadcastAsync(encoding.GetBytes(data));
         }
 
+        /// <summary>
+        /// Broadcasts the given data to the all connected clients
+        /// </summary>
+        /// <param name="bytes">Data to broadcast</param>
+        /// <returns>A dictionary where the keys are the clients and the values indicate whether the data sending was successful</returns>
+        /// <exception cref="Exception"></exception>
+        /// <exception cref="ArgumentNullException"></exception>
         public async Task<Dictionary<TcpClient, bool>> BroadcastAsync(byte[] bytes)
         {
             if (!Listening) throw new Exception("Server is not listening");
 
             if (bytes == null) throw new ArgumentNullException(nameof(bytes));
 
-            var clients = GetListeningClients();
+            var clients = GetConnectedClients();
 
 
             Task<bool>[] tasks = new Task<bool>[clients.Count];
@@ -176,16 +187,38 @@ namespace LiteTCP.Server
 
             return dict;
         }
+
         #endregion
 
         #region Events
+
+        /// <summary>
+        /// The event that'll be triggered when a client connects to the server
+        /// </summary>
         public event EventHandler<TcpClient> ClientConnected;
+
+        /// <summary>
+        /// The event that'll be triggered when a client disconnects from the server
+        /// </summary>
         public event EventHandler<TcpClient> ClientDisconnected;
+
+        /// <summary>
+        /// The event that'll be triggered when a data is received from a client
+        /// </summary>
         public event EventHandler<TCPDataReceivedEventArgs> DataReceived;
+
+        /// <summary>
+        /// The event that'll be triggered when a critical exception is thrown. When triggered, the server stops listening automatically
+        /// </summary>
         public event EventHandler<Exception> ServerErrored;
         #endregion
 
-        public IReadOnlyList<TcpClient> GetListeningClients()
+        /// <summary>
+        /// Gets all the currently connected clients
+        /// </summary>
+        /// <returns>Currently connected clients inside a list</returns>
+        /// <exception cref="Exception"></exception>
+        public IReadOnlyList<TcpClient> GetConnectedClients()
         {
             if (!Listening) throw new Exception("Server is not listening");
 

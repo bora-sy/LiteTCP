@@ -66,7 +66,7 @@ namespace LiteTCP.Client
 
         #region Events
         /// <summary>
-        /// The event that'll be triggered when a text is received
+        /// The event that'll be triggered when a data is received from the server
         /// </summary>
         public event EventHandler<TCPDataReceivedEventArgs> DataReceived;
 
