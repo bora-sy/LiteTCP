@@ -18,10 +18,24 @@ namespace LiteTCP.Server
         private TcpListener listener;
         public bool Listening { get; private set; } = false;
 
+        /// <summary>
+        /// Lite TCP Server
+        /// </summary>
+        /// <param name="IP">IP Address</param>
+        /// <param name="Port">Port</param>
         public LiteTCPServer(IPAddress IP, int Port) => listener = new TcpListener(IP, Port);
+
+        /// <summary>
+        /// Lite TCP Server
+        /// </summary>
+        /// <param name="endPoint">Endpoint</param>
         public LiteTCPServer(IPEndPoint endPoint) => listener = new TcpListener(endPoint);
 
         #region Start / Stop
+        /// <summary>
+        /// Stops the server
+        /// </summary>
+        /// <exception cref="Exception"></exception>
         public void StopListening()
         {
             if (!Listening) throw new Exception("Server is not Listening");
@@ -32,6 +46,10 @@ namespace LiteTCP.Server
             Listening = false;
         }
 
+        /// <summary>
+        /// Starts the server
+        /// </summary>
+        /// <exception cref="Exception"></exception>
         public void StartListening()
         {
             if (Listening) throw new Exception("Server is already Listening");
@@ -63,6 +81,15 @@ namespace LiteTCP.Server
         #endregion
 
         #region Send Data
+
+        /// <summary>
+        /// Sends data to the given client
+        /// </summary>
+        /// <param name="client">Receiver Client</param>
+        /// <param name="data">Data to send</param>
+        /// <returns>True if the data sending was successfull; otherwise, false</returns>
+        /// <exception cref="Exception"></exception>
+        /// <exception cref="ArgumentNullException"></exception>
         public async Task<bool> SendAsync(TcpClient client, byte[] data)
         {
             if (!Listening) throw new Exception("Server is not listening");
@@ -81,6 +108,16 @@ namespace LiteTCP.Server
                 return false;
             }
         }
+
+        /// <summary>
+        /// Sends data to the given client
+        /// </summary>
+        /// <param name="client">Receiver Client</param>
+        /// <param name="data">Text data</param>
+        /// <param name="encoding">The encoding that's used for the text</param>
+        /// <returns>True if the data sending was successfull; otherwise, false</returns>
+        /// <exception cref="Exception"></exception>
+        /// <exception cref="ArgumentNullException"></exception>
         public async Task<bool> SendAsync(TcpClient client, string data, Encoding encoding)
         {
             if (!Listening) throw new Exception("Server is not listening");
@@ -92,6 +129,14 @@ namespace LiteTCP.Server
         #endregion
 
         #region Broadcast
+        /// <summary>
+        /// Broadcasts the given data to the all connected clients
+        /// </summary>
+        /// <param name="data">Text to broadcast</param>
+        /// <param name="encoding">The encoding that's used for the text</param>
+        /// <returns>A dictionary where the keys are the clients and the values are whether the data sending was successful</returns>
+        /// <exception cref="Exception"></exception>
+        /// <exception cref="ArgumentNullException"></exception>
         public async Task<Dictionary<TcpClient, bool>> BroadcastAsync(string data, Encoding encoding)
         {
             if (!Listening) throw new Exception("Server is not listening");
