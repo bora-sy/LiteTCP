@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Net.Sockets;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using LiteTCP;
@@ -22,7 +24,19 @@ namespace LiteTCP_TestServer
             server.StartListening();
             Console.WriteLine("Started Listening");
 
-            await Task.Delay(-1);
+            while(true)
+            {
+                string toBroadcast = Console.ReadLine();
+
+                Dictionary<TcpClient, bool> successStatus = await server.BroadcastAsync(toBroadcast, Encoding.UTF8);
+
+                bool[] successValues = successStatus.Values.ToArray();
+
+                int successCount = successValues.Count(x => x == true);
+                int failCount = successValues.Count(x => x == false);
+
+                Console.WriteLine($"Broadcasted. Success: {successCount} // Fail: {failCount}");
+            }
         }
 
         private static void Server_DataReceived(object sender, LiteTCP.Events.TCPDataReceivedEventArgs e)
@@ -34,13 +48,13 @@ namespace LiteTCP_TestServer
         private static void Server_ClientDisconnected(object sender, System.Net.Sockets.TcpClient e)
         {
             int p = ((IPEndPoint)e.Client.RemoteEndPoint).Port;
-            Console.WriteLine($"Client Disconnected {p}");
+            Console.WriteLine($"Client Disconnected (Port: {p})");
         }
 
         private static void Server_ClientConnected(object sender, System.Net.Sockets.TcpClient e)
         {
             int p = ((IPEndPoint)e.Client.RemoteEndPoint).Port;
-            Console.WriteLine($"Client Connected {p}");
+            Console.WriteLine($"Client Connected (Port: {p})");
         }
     }
 }

@@ -20,6 +20,7 @@ namespace LiteTCP.Client
         public void Connect(IPAddress IP, int Port)
         {
             if (IP == null) throw new ArgumentNullException(nameof(IP));
+            if (Connected) throw new Exception("Client is already Connected");
 
             IPEndPoint ep = new IPEndPoint(IP, Port);
             Connect(ep);
@@ -36,7 +37,7 @@ namespace LiteTCP.Client
 
         public void Disconnect()
         {
-            if (!Connected) throw new Exception("Client was not Connected");
+            if (!Connected) throw new Exception("Client is not Connected");
             client.Close();
         }
         #endregion
@@ -50,7 +51,8 @@ namespace LiteTCP.Client
         #region Send Data
         public async Task<bool> SendAsync(string data, Encoding encoding)
         {
-            if(data == null) throw new ArgumentNullException(nameof(data));
+            if (!Connected) throw new Exception("Client is not Connected");
+            if (data == null) throw new ArgumentNullException(nameof(data));
             if (encoding == null) throw new ArgumentNullException(nameof(encoding));
 
             return await SendAsync(encoding.GetBytes(data));
@@ -58,7 +60,7 @@ namespace LiteTCP.Client
 
         public async Task<bool> SendAsync(byte[] data)
         {
-            if (!Connected) throw new Exception("Client was not Connected");
+            if (!Connected) throw new Exception("Client is not Connected");
             if(data == null) throw new ArgumentNullException(nameof(data));
 
             try
@@ -102,7 +104,7 @@ namespace LiteTCP.Client
             {
                 client.Close();
 
-                if (ServerDisconnected != null) ServerDisconnected.Invoke(this, new EventArgs());
+                if (Connected && ServerDisconnected != null) ServerDisconnected.Invoke(this, new EventArgs());
 
                 client.Dispose();
             }

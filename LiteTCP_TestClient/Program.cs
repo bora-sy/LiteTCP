@@ -18,16 +18,15 @@ namespace LiteTCP_TestClient
             LiteTCPClient client = new LiteTCPClient();
 
             client.Connect(IPAddress.Parse("127.0.0.1"), 8080);
+            client.DataReceived += Client_DataReceived;
 
-            while(true)
-            {
-                Console.Write("Data: ");
-                string data = Console.ReadLine();
+            await Task.Delay(-1);
+        }
 
-                await client.SendAsync(data, Encoding.UTF8);
-                Console.WriteLine("Sent\n");
-            }
 
+        private static void Client_DataReceived(object sender, LiteTCP.Events.TCPDataReceivedEventArgs e)
+        {
+            Console.WriteLine($"Received: {e.GetDataAsString(Encoding.UTF8)}");
         }
     }
 }
