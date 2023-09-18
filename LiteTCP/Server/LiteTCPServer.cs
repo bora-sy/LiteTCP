@@ -11,11 +11,18 @@ using System.Threading.Tasks;
 
 namespace LiteTCP.Server
 {
+    /// <summary>
+    /// Lite TCP Server
+    /// </summary>
     public class LiteTCPServer
     {
         private List<TcpClient> Clients = new List<TcpClient>();
 
         private TcpListener listener;
+
+        /// <summary>
+        /// Whether the server is currently listening or not
+        /// </summary>
         public bool Listening { get; private set; } = false;
 
         /// <summary>

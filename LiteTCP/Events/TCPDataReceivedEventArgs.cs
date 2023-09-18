@@ -4,6 +4,9 @@ using System.Text;
 
 namespace LiteTCP.Events
 {
+    /// <summary>
+    /// TCPDataReceivedEventArgs
+    /// </summary>
     public class TCPDataReceivedEventArgs : EventArgs
     {
         /// <summary>
@@ -29,6 +32,11 @@ namespace LiteTCP.Events
             return encoding.GetString(Data);
         }
 
+        /// <summary>
+        /// TCPDataReceivedEventArgs
+        /// </summary>
+        /// <param name="client">TCP Client</param>
+        /// <param name="data">Data in byte[] format</param>
         public TCPDataReceivedEventArgs(TcpClient client, byte[] data)
         {
             this.Client = client;

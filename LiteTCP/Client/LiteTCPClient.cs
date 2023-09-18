@@ -8,10 +8,16 @@ using System.Threading.Tasks;
 
 namespace LiteTCP.Client
 {
+    /// <summary>
+    /// Lite TCP Client
+    /// </summary>
     public class LiteTCPClient
     {
         private TcpClient client;
 
+        /// <summary>
+        /// Whether the client is currently connected or not
+        /// </summary>
         public bool Connected { get { return client.Connected; } }
 
         /// <summary>
