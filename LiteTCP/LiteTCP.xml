@@ -1,0 +1,207 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>LiteTCP</name>
+    </assembly>
+    <members>
+        <member name="T:LiteTCP.Client.LiteTCPClient">
+            <summary>
+            Lite TCP Client
+            </summary>
+        </member>
+        <member name="P:LiteTCP.Client.LiteTCPClient.Connected">
+            <summary>
+            Whether the client is currently connected or not
+            </summary>
+        </member>
+        <member name="M:LiteTCP.Client.LiteTCPClient.#ctor">
+            <summary>
+            Lite TCP Client
+            </summary>
+        </member>
+        <member name="M:LiteTCP.Client.LiteTCPClient.Connect(System.Net.IPAddress,System.Int32)">
+            <summary>
+            Connects the client to a server
+            </summary>
+            <param name="IP">IP Address</param>
+            <param name="Port">Port</param>
+            <exception cref="T:System.ArgumentNullException"></exception>
+            <exception cref="T:System.Exception"></exception>
+        </member>
+        <member name="M:LiteTCP.Client.LiteTCPClient.Connect(System.Net.IPEndPoint)">
+            <summary>
+            Connects the client to a server
+            </summary>
+            <param name="EP">Endpoint</param>
+            <exception cref="T:System.ArgumentNullException"></exception>
+            <exception cref="T:System.Exception"></exception>
+        </member>
+        <member name="M:LiteTCP.Client.LiteTCPClient.Disconnect">
+            <summary>
+            Disconnects the client from the server
+            </summary>
+            <exception cref="T:System.Exception"></exception>
+        </member>
+        <member name="E:LiteTCP.Client.LiteTCPClient.DataReceived">
+            <summary>
+            The event that'll be triggered when a data is received from the server
+            </summary>
+        </member>
+        <member name="E:LiteTCP.Client.LiteTCPClient.ClientDisconnected">
+            <summary>
+            The event that'll be triggered when the client is disconnected from the server
+            </summary>
+        </member>
+        <member name="M:LiteTCP.Client.LiteTCPClient.SendAsync(System.String,System.Text.Encoding)">
+            <summary>
+            Sends data to the server
+            </summary>
+            <param name="text">Text to send</param>
+            <param name="encoding">The encoding that's used for the text</param>
+            <returns>True if the data sending was successfull; otherwise, false</returns>
+            <exception cref="T:System.Exception"></exception>
+            <exception cref="T:System.ArgumentNullException"></exception>
+        </member>
+        <member name="M:LiteTCP.Client.LiteTCPClient.SendAsync(System.Byte[])">
+            <summary>
+            Sends data to the server
+            </summary>
+            <param name="data">Bytes to send</param>
+            <returns>True if the data sending was successfull; otherwise, false</returns>
+            <exception cref="T:System.Exception"></exception>
+            <exception cref="T:System.ArgumentNullException"></exception>
+        </member>
+        <member name="T:LiteTCP.Events.TCPDataReceivedEventArgs">
+            <summary>
+            TCPDataReceivedEventArgs
+            </summary>
+        </member>
+        <member name="P:LiteTCP.Events.TCPDataReceivedEventArgs.Client">
+            <summary>
+            The TCP Client
+            </summary>
+        </member>
+        <member name="P:LiteTCP.Events.TCPDataReceivedEventArgs.Data">
+            <summary>
+            Incoming Data
+            </summary>
+        </member>
+        <member name="M:LiteTCP.Events.TCPDataReceivedEventArgs.GetDataAsString(System.Text.Encoding)">
+            <summary>
+            Converts the incoming data to a string using the given encoding
+            </summary>
+            <param name="encoding">The encoding that'll be used for converting</param>
+            <returns>Incoming data in string format</returns>
+            <exception cref="T:System.ArgumentNullException"></exception>
+        </member>
+        <member name="M:LiteTCP.Events.TCPDataReceivedEventArgs.#ctor(System.Net.Sockets.TcpClient,System.Byte[])">
+            <summary>
+            TCPDataReceivedEventArgs
+            </summary>
+            <param name="client">TCP Client</param>
+            <param name="data">Data in byte[] format</param>
+        </member>
+        <member name="T:LiteTCP.Server.LiteTCPServer">
+            <summary>
+            Lite TCP Server
+            </summary>
+        </member>
+        <member name="P:LiteTCP.Server.LiteTCPServer.Listening">
+            <summary>
+            Whether the server is currently listening or not
+            </summary>
+        </member>
+        <member name="M:LiteTCP.Server.LiteTCPServer.#ctor(System.Net.IPAddress,System.Int32)">
+            <summary>
+            Lite TCP Server
+            </summary>
+            <param name="IP">IP Address</param>
+            <param name="Port">Port</param>
+        </member>
+        <member name="M:LiteTCP.Server.LiteTCPServer.#ctor(System.Net.IPEndPoint)">
+            <summary>
+            Lite TCP Server
+            </summary>
+            <param name="endPoint">Endpoint</param>
+        </member>
+        <member name="M:LiteTCP.Server.LiteTCPServer.StopListening">
+            <summary>
+            Stops the server
+            </summary>
+            <exception cref="T:System.Exception"></exception>
+        </member>
+        <member name="M:LiteTCP.Server.LiteTCPServer.StartListening">
+            <summary>
+            Starts the server
+            </summary>
+            <exception cref="T:System.Exception"></exception>
+        </member>
+        <member name="M:LiteTCP.Server.LiteTCPServer.SendAsync(System.Net.Sockets.TcpClient,System.Byte[])">
+            <summary>
+            Sends data to the given client
+            </summary>
+            <param name="client">Receiver Client</param>
+            <param name="data">Data to send</param>
+            <returns>True if the data sending was successfull; otherwise, false</returns>
+            <exception cref="T:System.Exception"></exception>
+            <exception cref="T:System.ArgumentNullException"></exception>
+        </member>
+        <member name="M:LiteTCP.Server.LiteTCPServer.SendAsync(System.Net.Sockets.TcpClient,System.String,System.Text.Encoding)">
+            <summary>
+            Sends data to the given client
+            </summary>
+            <param name="client">Receiver Client</param>
+            <param name="data">Text data</param>
+            <param name="encoding">The encoding that's used for the text</param>
+            <returns>True if the data sending was successfull; otherwise, false</returns>
+            <exception cref="T:System.Exception"></exception>
+            <exception cref="T:System.ArgumentNullException"></exception>
+        </member>
+        <member name="M:LiteTCP.Server.LiteTCPServer.BroadcastAsync(System.String,System.Text.Encoding)">
+            <summary>
+            Broadcasts the given data to the all connected clients
+            </summary>
+            <param name="data">Text to broadcast</param>
+            <param name="encoding">The encoding that's used for the text</param>
+            <returns>A dictionary where the keys are the clients and the values indicate whether the data sending was successful</returns>
+            <exception cref="T:System.Exception"></exception>
+            <exception cref="T:System.ArgumentNullException"></exception>
+        </member>
+        <member name="M:LiteTCP.Server.LiteTCPServer.BroadcastAsync(System.Byte[])">
+            <summary>
+            Broadcasts the given data to the all connected clients
+            </summary>
+            <param name="bytes">Data to broadcast</param>
+            <returns>A dictionary where the keys are the clients and the values indicate whether the data sending was successful</returns>
+            <exception cref="T:System.Exception"></exception>
+            <exception cref="T:System.ArgumentNullException"></exception>
+        </member>
+        <member name="E:LiteTCP.Server.LiteTCPServer.ClientConnected">
+            <summary>
+            The event that'll be triggered when a client connects to the server
+            </summary>
+        </member>
+        <member name="E:LiteTCP.Server.LiteTCPServer.ClientDisconnected">
+            <summary>
+            The event that'll be triggered when a client disconnects from the server
+            </summary>
+        </member>
+        <member name="E:LiteTCP.Server.LiteTCPServer.DataReceived">
+            <summary>
+            The event that'll be triggered when a data is received from a client
+            </summary>
+        </member>
+        <member name="E:LiteTCP.Server.LiteTCPServer.ServerErrored">
+            <summary>
+            The event that'll be triggered when a critical exception is thrown. When triggered, the server stops listening automatically
+            </summary>
+        </member>
+        <member name="M:LiteTCP.Server.LiteTCPServer.GetConnectedClients">
+            <summary>
+            Gets all the currently connected clients
+            </summary>
+            <returns>Currently connected clients inside a list</returns>
+            <exception cref="T:System.Exception"></exception>
+        </member>
+    </members>
+</doc>
