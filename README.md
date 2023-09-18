@@ -6,5 +6,3 @@ Lightweight TCP Server & Client for C#
 ### TODO:
 
 * Add Documentation
-* Add Summaries
-* Upload to NuGet
