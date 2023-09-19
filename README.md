@@ -5,7 +5,7 @@ Lightweight TCP Server & Client for C#
 ## Installation
 The package is available on [NuGet](https://nuget.org/packages/LiteTCP)
 
-[![NuGet](https://img.shields.io/nuget/v/SimpleWebServer.svg?label=NuGet)](https://nuget.org/packages/LiteTCP)
+[![NuGet](https://img.shields.io/nuget/v/LiteTCP.svg?label=NuGet)](https://nuget.org/packages/LiteTCP)
 
 ## Usage
 *Coming Soon*
