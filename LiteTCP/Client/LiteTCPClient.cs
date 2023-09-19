@@ -74,7 +74,7 @@ namespace LiteTCP.Client
         /// <summary>
         /// The event that'll be triggered when a data is received from the server
         /// </summary>
-        public event EventHandler<TCPDataReceivedEventArgs> DataReceived;
+        public event EventHandler<TCPClientDataReceivedEventArgs> DataReceived;
 
         /// <summary>
         /// The event that'll be triggered when the client is disconnected from the server
@@ -139,7 +139,7 @@ namespace LiteTCP.Client
                     byte[] incomingData = await NetworkStreamUtils.readDataFromNetworkStreamAsync(stream);
                     if (incomingData == null) throw new IOException();
 
-                    if (DataReceived != null) DataReceived.Invoke(this, new TCPDataReceivedEventArgs(client, incomingData));
+                    if (DataReceived != null) DataReceived.Invoke(this, new TCPClientDataReceivedEventArgs(this, incomingData));
                 }
 
             }

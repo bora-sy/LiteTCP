@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 namespace LiteTCP.Server
 {
     /// <summary>
-    /// Lite TCP Server
+    /// Lite TCP LiteServer
     /// </summary>
     public class LiteTCPServer
     {
@@ -26,14 +26,14 @@ namespace LiteTCP.Server
         public bool Listening { get; private set; } = false;
 
         /// <summary>
-        /// Lite TCP Server
+        /// Lite TCP LiteServer
         /// </summary>
         /// <param name="IP">IP Address</param>
         /// <param name="Port">Port</param>
         public LiteTCPServer(IPAddress IP, int Port) => listener = new TcpListener(IP, Port);
 
         /// <summary>
-        /// Lite TCP Server
+        /// Lite TCP LiteServer
         /// </summary>
         /// <param name="endPoint">Endpoint</param>
         public LiteTCPServer(IPEndPoint endPoint) => listener = new TcpListener(endPoint);
@@ -94,7 +94,7 @@ namespace LiteTCP.Server
         /// <summary>
         /// Sends data to the given client
         /// </summary>
-        /// <param name="client">Receiver Client</param>
+        /// <param name="client">Receiver tcpClient</param>
         /// <param name="data">Data to send</param>
         /// <returns>True if the data sending was successfull; otherwise, false</returns>
         /// <exception cref="Exception"></exception>
@@ -121,7 +121,7 @@ namespace LiteTCP.Server
         /// <summary>
         /// Sends data to the given client
         /// </summary>
-        /// <param name="client">Receiver Client</param>
+        /// <param name="client">Receiver tcpClient</param>
         /// <param name="data">Text data</param>
         /// <param name="encoding">The encoding that's used for the text</param>
         /// <returns>True if the data sending was successfull; otherwise, false</returns>
@@ -212,7 +212,7 @@ namespace LiteTCP.Server
         /// <summary>
         /// The event that'll be triggered when a data is received from a client
         /// </summary>
-        public event EventHandler<TCPDataReceivedEventArgs> DataReceived;
+        public event EventHandler<TCPServerDataReceivedEventArgs> DataReceived;
 
         /// <summary>
         /// The event that'll be triggered when a critical exception is thrown. When triggered, the server stops listening automatically
@@ -245,7 +245,7 @@ namespace LiteTCP.Server
                     byte[] incomingData = await NetworkStreamUtils.readDataFromNetworkStreamAsync(stream);
                     if (incomingData == null) throw new IOException();
 
-                    if (DataReceived != null) DataReceived.Invoke(this, new TCPDataReceivedEventArgs(client, incomingData));
+                    if (DataReceived != null) DataReceived.Invoke(this, new TCPServerDataReceivedEventArgs(this, client, incomingData));
                 }
 
             }

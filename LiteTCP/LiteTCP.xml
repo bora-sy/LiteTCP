@@ -71,22 +71,22 @@
             <exception cref="T:System.Exception"></exception>
             <exception cref="T:System.ArgumentNullException"></exception>
         </member>
-        <member name="T:LiteTCP.Events.TCPDataReceivedEventArgs">
+        <member name="T:LiteTCP.Events.TCPClientDataReceivedEventArgs">
             <summary>
-            TCPDataReceivedEventArgs
+            TCPServerDataReceivedEventArgs
             </summary>
         </member>
-        <member name="P:LiteTCP.Events.TCPDataReceivedEventArgs.Client">
+        <member name="P:LiteTCP.Events.TCPClientDataReceivedEventArgs.LiteClient">
             <summary>
-            The TCP Client
+            Lite TCP Client
             </summary>
         </member>
-        <member name="P:LiteTCP.Events.TCPDataReceivedEventArgs.Data">
+        <member name="P:LiteTCP.Events.TCPClientDataReceivedEventArgs.Data">
             <summary>
             Incoming Data
             </summary>
         </member>
-        <member name="M:LiteTCP.Events.TCPDataReceivedEventArgs.GetDataAsString(System.Text.Encoding)">
+        <member name="M:LiteTCP.Events.TCPClientDataReceivedEventArgs.GetDataAsString(System.Text.Encoding)">
             <summary>
             Converts the incoming data to a string using the given encoding
             </summary>
@@ -94,16 +94,82 @@
             <returns>Incoming data in string format</returns>
             <exception cref="T:System.ArgumentNullException"></exception>
         </member>
-        <member name="M:LiteTCP.Events.TCPDataReceivedEventArgs.#ctor(System.Net.Sockets.TcpClient,System.Byte[])">
+        <member name="M:LiteTCP.Events.TCPClientDataReceivedEventArgs.CreateResponseAsync(System.Byte[])">
             <summary>
-            TCPDataReceivedEventArgs
+            Creates a response to the incoming data
             </summary>
-            <param name="client">TCP Client</param>
+            <param name="data">Data</param>
+            <returns>True if the data sending was successfull; otherwise, false</returns>
+        </member>
+        <member name="M:LiteTCP.Events.TCPClientDataReceivedEventArgs.CreateResponseAsync(System.String,System.Text.Encoding)">
+            <summary>
+            Creates a response to the incoming data
+            </summary>
+            <param name="text">Text data</param>
+            <param name="encoding">The encoding that's used for the text</param>
+            <returns>True if the data sending was successfull; otherwise, false</returns>
+        </member>
+        <member name="M:LiteTCP.Events.TCPClientDataReceivedEventArgs.#ctor(LiteTCP.Client.LiteTCPClient,System.Byte[])">
+            <summary>
+            TCPServerDataReceivedEventArgs
+            </summary>
+            <param name="liteClient">Lite TCP Client</param>
             <param name="data">Data in byte[] format</param>
+        </member>
+        <member name="T:LiteTCP.Events.TCPServerDataReceivedEventArgs">
+            <summary>
+            TCPServerDataReceivedEventArgs
+            </summary>
+        </member>
+        <member name="P:LiteTCP.Events.TCPServerDataReceivedEventArgs.LiteServer">
+            <summary>
+            Lite TCP Server
+            </summary>
+        </member>
+        <member name="P:LiteTCP.Events.TCPServerDataReceivedEventArgs.tcpClient">
+            <summary>
+            TCP Client
+            </summary>
+        </member>
+        <member name="P:LiteTCP.Events.TCPServerDataReceivedEventArgs.Data">
+            <summary>
+            Incoming Data
+            </summary>
+        </member>
+        <member name="M:LiteTCP.Events.TCPServerDataReceivedEventArgs.GetDataAsString(System.Text.Encoding)">
+            <summary>
+            Converts the incoming data to a string using the given encoding
+            </summary>
+            <param name="encoding">The encoding that'll be used for converting</param>
+            <returns>Incoming data in string format</returns>
+            <exception cref="T:System.ArgumentNullException"></exception>
+        </member>
+        <member name="M:LiteTCP.Events.TCPServerDataReceivedEventArgs.CreateResponseAsync(System.Byte[])">
+            <summary>
+            Creates a response to the incoming data
+            </summary>
+            <param name="data">Data</param>
+            <returns>True if the data sending was successfull; otherwise, false</returns>
+        </member>
+        <member name="M:LiteTCP.Events.TCPServerDataReceivedEventArgs.CreateResponseAsync(System.String,System.Text.Encoding)">
+            <summary>
+            Creates a response to the incoming data
+            </summary>
+            <param name="text">Text data</param>
+            <param name="encoding">The encoding that's used for the text</param>
+            <returns>True if the data sending was successfull; otherwise, false</returns>
+        </member>
+        <member name="M:LiteTCP.Events.TCPServerDataReceivedEventArgs.#ctor(LiteTCP.Server.LiteTCPServer,System.Net.Sockets.TcpClient,System.Byte[])">
+            <summary>
+            TCPServerDataReceivedEventArgs
+            </summary>
+            <param name="server">Lite TCP LiteServer</param>
+            <param name="data">Data in byte[] format</param>
+            <param name="client">TCP Client</param>
         </member>
         <member name="T:LiteTCP.Server.LiteTCPServer">
             <summary>
-            Lite TCP Server
+            Lite TCP LiteServer
             </summary>
         </member>
         <member name="P:LiteTCP.Server.LiteTCPServer.Listening">
@@ -113,14 +179,14 @@
         </member>
         <member name="M:LiteTCP.Server.LiteTCPServer.#ctor(System.Net.IPAddress,System.Int32)">
             <summary>
-            Lite TCP Server
+            Lite TCP LiteServer
             </summary>
             <param name="IP">IP Address</param>
             <param name="Port">Port</param>
         </member>
         <member name="M:LiteTCP.Server.LiteTCPServer.#ctor(System.Net.IPEndPoint)">
             <summary>
-            Lite TCP Server
+            Lite TCP LiteServer
             </summary>
             <param name="endPoint">Endpoint</param>
         </member>
@@ -140,7 +206,7 @@
             <summary>
             Sends data to the given client
             </summary>
-            <param name="client">Receiver Client</param>
+            <param name="client">Receiver tcpClient</param>
             <param name="data">Data to send</param>
             <returns>True if the data sending was successfull; otherwise, false</returns>
             <exception cref="T:System.Exception"></exception>
@@ -150,7 +216,7 @@
             <summary>
             Sends data to the given client
             </summary>
-            <param name="client">Receiver Client</param>
+            <param name="client">Receiver tcpClient</param>
             <param name="data">Text data</param>
             <param name="encoding">The encoding that's used for the text</param>
             <returns>True if the data sending was successfull; otherwise, false</returns>
