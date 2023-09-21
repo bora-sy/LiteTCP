@@ -1,15 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
-using System.Net;
-using System.Net.Sockets;
-
 using LiteTCP.Client;
 using LiteTCP.Events;
-
 namespace Demo_Client
 {
     internal class Program
@@ -35,7 +30,7 @@ namespace Demo_Client
 
         }
 
-        private static void Client_DataReceived(object sender, TCPDataReceivedEventArgs e)
+        private static void Client_DataReceived(object sender, TCPClientDataReceivedEventArgs e)
         {
             string data = e.GetDataAsString(Encoding.UTF8);
             Console.WriteLine("Received data: " + data);

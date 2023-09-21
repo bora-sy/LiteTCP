@@ -34,7 +34,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="LiteTCP, Version=1.0.4.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\LiteTCP.1.0.4\lib\net4.8\LiteTCP.dll</HintPath>
+      <HintPath>..\packages\LiteTCP.1.0.5\lib\net4.8\LiteTCP.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
