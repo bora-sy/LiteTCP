@@ -16,18 +16,13 @@ These examples are already built as a project. Check the [Demo Project](https://
 
 ### Client:
 ```csharp
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+using System;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
-using System.Net;
-using System.Net.Sockets;
-
 using LiteTCP.Client;
 using LiteTCP.Events;
-
 namespace Demo_Client
 {
     internal class Program
@@ -53,7 +48,7 @@ namespace Demo_Client
 
         }
 
-        private static void Client_DataReceived(object sender, TCPDataReceivedEventArgs e)
+        private static void Client_DataReceived(object sender, TCPClientDataReceivedEventArgs e)
         {
             string data = e.GetDataAsString(Encoding.UTF8);
             Console.WriteLine("Received data: " + data);
@@ -66,17 +61,14 @@ namespace Demo_Client
 
 ### Server:
 ```csharp
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+using System;
+using System.Net;
+using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 
-using System.Net;
-using System.Net.Sockets;
-
-using LiteTCP.Server;
 using LiteTCP.Events;
+using LiteTCP.Server;
 
 namespace Demo_Server
 {
@@ -99,14 +91,14 @@ namespace Demo_Server
             await Task.Delay(-1); // To prevent the console from closing
         }
 
-        private static async void Server_DataReceived(object sender, TCPDataReceivedEventArgs e)
+        private static async void Server_DataReceived(object sender, TCPServerDataReceivedEventArgs e)
         {
             string data = e.GetDataAsString(Encoding.UTF8);
             Console.WriteLine($"Received data: " + data);
 
             string response = "Echo " + data;
 
-            await server.SendAsync(e.Client, response, Encoding.UTF8);
+            await e.CreateResponseAsync(response, Encoding.UTF8); // Creating response to the incoming data
 
         }
 
